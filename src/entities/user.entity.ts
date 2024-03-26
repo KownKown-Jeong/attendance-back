@@ -1,5 +1,6 @@
 // src/entities/user.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { Person } from './person.entity';
 
 @Entity({ schema: 'user_schema' })
 export class User {
@@ -11,4 +12,7 @@ export class User {
 
   @Column()
   password_hash: string;
+
+  @OneToOne(() => Person, (person) => person.user, { nullable: true })
+  person: Person;
 }

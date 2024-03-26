@@ -1,7 +1,9 @@
 // src/entities/person.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { User } from './user.entity';
 import { Image } from './image.entity';
+import { Address } from './address.entity';
+import { Tag } from './tag.entity';
 
 @Entity({ schema: 'profile_schema' })
 export class Person {
@@ -10,10 +12,6 @@ export class Person {
 
   @Column()
   user_id: number;
-
-  @OneToOne(() => User)
-  @JoinColumn()
-  user: User;
 
   @Column()
   name: string;
@@ -26,7 +24,22 @@ export class Person {
 
   @Column()
   profile_image_id: number;
+  
+  @OneToOne(() => User)
+  @JoinColumn()
+  user: User;
+
+  @ManyToOne(() => Address, address => address.people)
+  address: Address;
 
   @ManyToOne(() => Image)
   profile_image: Image;
+
+  @ManyToMany(() => Tag)
+  @JoinTable({ name: 'person_tag' })
+  tags: Tag[];
+
+  @ManyToMany(() => Person, (person) => person.familyMembers)
+  @JoinTable()
+  familyMembers: Person[];
 }

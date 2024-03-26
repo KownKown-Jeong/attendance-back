@@ -1,5 +1,6 @@
 // src/entities/tag.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
+import { Person } from './person.entity';
 
 @Entity({ schema: 'board_schema' })
 export class Tag {
@@ -8,4 +9,7 @@ export class Tag {
 
   @Column()
   name: string;
+
+  @ManyToMany(() => Person, (person) => person.tags)
+  people: Person[];
 }
