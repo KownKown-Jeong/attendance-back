@@ -5,30 +5,27 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { User } from './entities/user.entity';
+
 import { AttendanceDate } from './entities/attendance-date.entity';
-import { Attendance } from './entities/attendance.entity';
-import { Person } from './entities/person.entity';
-import { Address } from './entities/address.entity';
-import { PersonAddress } from './entities/person-address.entity';
-import { FamilyRelationship } from './entities/family-relationship.entity';
+import { AttendanceJUNC } from './entities/attendanceJUNC.entity';
+import { Part } from './entities/group-department-part.entity';
+import { Department } from './entities/group-department.entity';
+import { Role } from './entities/group-role.entity';
+import { RoleJUNC } from './entities/group-roleJUNCentity';
+import { Address } from './entities/person-address.entity';
+import { FamilyJUNC } from './entities/person-familyJUNC.entity';
+import { PersonImage } from './entities/person-image.entity';
+import { PersonRecord } from './entities/person-record.entity';
 import { PersonTag } from './entities/person-tag.entity';
-import { PersonSecretRecord } from './entities/person-secret-record.entity';
-import { Department } from './entities/department.entity';
-import { Class } from './entities/class.entity';
-import { Role } from './entities/role.entity';
-import { PersonRole } from './entities/person-role.entity';
-import { Group } from './entities/group.entity';
-import { GroupMember } from './entities/group-member.entity';
-import { GroupRole } from './entities/group-role.entity';
-import { PrayerRequest } from './entities/prayer-request.entity';
-import { PrayerLog } from './entities/prayer-log.entity';
-import { Post } from './entities/post.entity';
-import { Image } from './entities/image.entity';
+import { PersonTagCNT } from './entities/person-tagJUNC.entity';
+import { Person } from './entities/person.entity';
+import { PostComment } from './entities/post-comment.entity';
 import { PostImage } from './entities/post-image.entity';
-import { Tag } from './entities/tag.entity';
 import { PostTag } from './entities/post-tag.entity';
-import { Comment } from './entities/comment.entity';
+import { PostTagJUNC } from './entities/post-tagJUNC.entity';
+import { Post } from './entities/post.entity';
+import { User } from './entities/user.entity';
+
 import { ConfigModule } from '@nestjs/config';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -37,36 +34,31 @@ dotenv.config();
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'testdatabase-1.czcw84ge6p5t.ap-southeast-2.rds.amazonaws.com',
+      host: 'testdatabase.czcw84ge6p5t.ap-southeast-2.rds.amazonaws.com',
       port: 3306,
       username: 'admin',
       password: 'dbclqn2020',
-      database: 'user_schema',
-      entities: [
-        User,
-        AttendanceDate,
-        Attendance,
-        Person,
-        Address,
-        PersonAddress,
-        FamilyRelationship,
-        PersonTag,
-        PersonSecretRecord,
+      database: 'testdatabase',
+      entities: [ 
+        AttendanceDate, 
+        AttendanceJUNC, 
+        Part, 
         Department,
-        Class,
-        Role,
-        PersonRole,
-        Group,
-        GroupMember,
-        GroupRole,
-        PrayerRequest,
-        PrayerLog,
-        Post,
-        Image,
+        Role, 
+        RoleJUNC,
+        Address,
+        FamilyJUNC,
+        PersonImage,
+        PersonRecord,
+        PersonTag,
+        PersonTagCNT,
+        Person,
+        PostComment,
         PostImage,
-        Tag,
         PostTag,
-        Comment,
+        PostTagJUNC,
+        Post,
+        User, 
       ],
       synchronize: false,
     }),

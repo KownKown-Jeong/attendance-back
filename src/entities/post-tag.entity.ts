@@ -1,22 +1,19 @@
 // src/entities/post-tag.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { Post } from './post.entity';
-import { Tag } from './tag.entity';
+// The entity class for the post tag table
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { PostTagJUNC } from './post-tagJUNC.entity';
 
-@Entity({ schema: 'board_schema' })
+@Entity({ name: 'post.tag'  })
 export class PostTag {
+  // Tag number
   @PrimaryGeneratedColumn()
   id: number;
 
+  // Tag name
   @Column()
-  post_id: number;
+  name: string;
 
-  @ManyToOne(() => Post)
-  post: Post;
-
-  @Column()
-  tag_id: number;
-
-  @ManyToOne(() => Tag)
-  tag: Tag;
+  // Tag relationship with PostTagJUNC
+  @OneToMany(() => PostTagJUNC, postTagJUNC => postTagJUNC.tag)
+  postTagJUNCs: PostTagJUNC[];
 }

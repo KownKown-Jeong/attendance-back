@@ -5,10 +5,10 @@ import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import { User } from '@entities/user.entity';
 import { Person } from '@entities/person.entity';
-import { Address } from '@entities/address.entity';
-import { FamilyRelationship } from '@entities/family-relationship.entity';
-import { Tag } from '@entities/tag.entity';
-import { PersonTag } from '@entities/person-tag.entity';
+import { Address } from '@entities/person-address.entity';
+import { FamilyRelationship } from '@entities/person-familyJUNC.entity';
+import { Tag } from '@entities/person-tag.entity';
+import { PersonTag } from '@entities/person-tagJUNC.entity';
 import { SignUpDto } from './dto/sign-up.dto';
 import * as bcrypt from 'bcrypt';
 

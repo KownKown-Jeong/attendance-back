@@ -1,22 +1,19 @@
 // src/entities/person-tag.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { Person } from './person.entity';
-import { Tag } from './tag.entity';
+// The entity class for the personal tag table
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { PersonTagCNT } from './person-tagJUNC.entity';
 
-@Entity({ schema: 'profile_schema' })
+@Entity({ name: 'person.tag' })
 export class PersonTag {
+  // Tag Number
   @PrimaryGeneratedColumn()
   id: number;
 
+  // Tag name
   @Column()
-  person_id: number;
+  name: string;
 
-  @ManyToOne(() => Person)
-  person: Person;
-
-  @Column()
-  tag_id: number;
-
-  @ManyToOne(() => Tag)
-  tag: Tag;
+  // Tag relationship with PersonTagCNT
+  @OneToMany(() => PersonTagCNT, (personTagCNT) => personTagCNT.tag)
+  personTagCNTs: PersonTagCNT[];
 }

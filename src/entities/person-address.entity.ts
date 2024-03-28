@@ -1,25 +1,20 @@
 // src/entities/person-address.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+// The entity class for the address table
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Person } from './person.entity';
-import { Address } from './address.entity';
 
-@Entity({ schema: 'profile_schema' })
-export class PersonAddress {
+@Entity({ name: 'people.address' })
+export class Address {
+  // Address Number
   @PrimaryGeneratedColumn()
   id: number;
 
+  // Address
   @Column()
-  person_id: number;
+  street: string;
 
-  @ManyToOne(() => Person)
-  person: Person;
-
-  @Column()
-  address_id: number;
-
-  @ManyToOne(() => Address)
-  address: Address;
-
-  @Column()
-  is_primary: boolean;
+  // Address relationship with Person
+  // One address can have multiple residents, connected with this field
+  @OneToMany(() => Person, person => person.address)
+  residents: Person[];
 }

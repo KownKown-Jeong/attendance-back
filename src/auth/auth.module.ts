@@ -3,6 +3,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { User } from '@entities/user.entity';
+import { Person } from '@entities/person.entity';
+import { Address } from '@entities/person-address.entity';
+import { FamilyRelationship } from '@entities/person-familyJUNC.entity';
+import { Tag } from '@entities/person-tag.entity';
+import { PersonTag } from '@entities/person-tagJUNC.entity';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
@@ -12,7 +17,7 @@ import { JwtStrategy } from './jwt.strategy';
 @Module({
   imports: [
     ConfigModule,
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Person, Address, FamilyRelationship, Tag, PersonTag]),
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],

@@ -1,22 +1,30 @@
 // src/entities/group-role.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { Group } from './group.entity';
-import { Role } from './role.entity';
+// The entity class for the role table
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { RoleJUNC } from './group-roleJUNCentity';
 
-@Entity({ schema: 'group_schema' })
-export class GroupRole {
+@Entity({ name: 'group.role' })
+export class Role {
+  // Role Number
   @PrimaryGeneratedColumn()
   id: number;
 
+  // Role name
   @Column()
-  group_id: number;
+  name: string;
 
-  @ManyToOne(() => Group)
-  group: Group;
+  // Role description
+  @Column({ nullable: true })
+  description: string;
 
-  @Column()
-  role_id: number;
+  // Role relationship with RoleJUNC, which is a JUNCTION table, nullable
+  @OneToMany(() => RoleJUNC, roleJUNC => roleJUNC.role, { nullable: true })
+  roleJUNCs: RoleJUNC[];
 
-  @ManyToOne(() => Role)
-  role: Role;
+  // Role type (visible or non-visible) for administartors
+  @Column({
+    type: 'enum',
+    enum: ['visible', 'non-visible'],
+  })
+  type: 'visible' | 'non-visible' ;
 }

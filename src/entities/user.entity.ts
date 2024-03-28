@@ -1,18 +1,23 @@
 // src/entities/user.entity.ts
+// The entity class for the user table
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 import { Person } from './person.entity';
 
-@Entity({ schema: 'user_schema' })
+@Entity({ name: 'user' })
 export class User {
+  // User number
   @PrimaryGeneratedColumn()
   id: number;
 
+  // User ID(Phone number, except 010)
   @Column({ unique: true })
-  phone_number: string;
+  user_id: string;
 
+  // User password hash
   @Column()
-  password_hash: string;
+  user_password: string;
 
-  @OneToOne(() => Person, (person) => person.user, { nullable: true })
+  // User relationship with Person
+  @OneToOne(() => Person, (person) => person.user, )
   person: Person;
 }

@@ -1,22 +1,23 @@
 // src/entities/post-image.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+// The entity class for the post image table
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 import { Post } from './post.entity';
-import { Image } from './image.entity';
 
-@Entity({ schema: 'board_schema' })
+@Entity({ name: 'post.image' })
 export class PostImage {
+  // Post Image number
   @PrimaryGeneratedColumn()
   id: number;
 
+  // Image URL
   @Column()
-  post_id: number;
+  url: string;
 
-  @ManyToOne(() => Post)
+  // Image uploaded date
+  @Column()
+  uploaded_at: Date;
+
+  // Image relationship with Post
+  @OneToOne(() => Post, (post) => post.image)
   post: Post;
-
-  @Column()
-  image_id: number;
-
-  @ManyToOne(() => Image)
-  image: Image;
 }
