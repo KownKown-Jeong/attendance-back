@@ -6,7 +6,7 @@ import { RoleJUNC } from './group-roleJUNCentity';
 import { Person } from './person.entity';
 
 @Entity({ name: 'attendanceJUNC' })
-export class attendanceJUNC {
+export class AttendanceJUNC {
   // Attendance Number
   @PrimaryGeneratedColumn()
   id: number;

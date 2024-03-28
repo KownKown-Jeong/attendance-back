@@ -1,7 +1,7 @@
 // src/entities/person.entity.ts
 // The entity class for the person table
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne, ManyToMany, JoinTable, OneToMany } from 'typeorm';
-import { Attendance } from './attendanceJUNC.entity';
+import { AttendanceJUNC } from './attendanceJUNC.entity';
 import { RoleJUNC } from './group-roleJUNCentity';
 import { Address } from './person-address.entity';
 import { FamilyJUNC } from './person-familyJUNC.entity';
@@ -9,6 +9,7 @@ import { PersonImage } from './person-image.entity';
 import { PersonRecord } from './person-record.entity';
 import { PersonTagCNT } from './person-tagJUNC.entity';
 import { Post } from './post.entity';
+import { PostComment } from './post-comment.entity';
 import { User } from './user.entity';
 
 @Entity({ name: 'person' })
@@ -84,9 +85,14 @@ export class Person {
   @OneToMany(() => Post, post => post.person, { nullable: true })
   posts: Post[];
 
+  // Post Comments
+  // Person relationship with PostComment as author, nullable
+  @OneToMany(() => PostComment, postComment => postComment.person, { nullable: true })
+  postComments: PostComment[];
+
   // Attendance
   // Person relationship with Attendance, nullable
-  @OneToMany(() => Attendance, attendance => attendance.person, { nullable: true })
-  attendances: Attendance[];
+  @OneToMany(() => AttendanceJUNC, attendanceJUNC => attendanceJUNC.person, { nullable: true })
+  attendances: AttendanceJUNC[];
 
 }

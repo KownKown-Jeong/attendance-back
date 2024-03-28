@@ -11,7 +11,7 @@ export enum FamilyRelationType {
   MOTHER_DAUGHTER = 'mother_daughter',
 }
 
-@Entity({ name: 'group.familyJUNC' })
+@Entity({ name: 'person.familyJUNC' })
 export class FamilyJUNC {
   // Family number
   @PrimaryGeneratedColumn()

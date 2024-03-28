@@ -15,7 +15,7 @@ export class PostComment {
   post_id: number;
 
   // Comment relationship with Post
-  @ManyToOne(() => Post)
+  @ManyToOne(() => Post, post => post.comments)
   post: Post;
 
   // Author(Person) ID
@@ -23,8 +23,8 @@ export class PostComment {
   author_id: number;
 
   // Comment relationship with Person
-  @ManyToOne(() => Person)
-  author: Person;
+  @ManyToOne(() => Person, person => person.postComments)
+  person: Person;
 
   // Comment content
   @Column()

@@ -3,7 +3,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Person } from './person.entity';
 
-@Entity({ name: 'people.address' })
+@Entity({ name: 'person.address' })
 export class Address {
   // Address Number
   @PrimaryGeneratedColumn()

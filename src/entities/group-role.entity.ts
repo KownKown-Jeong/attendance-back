@@ -24,7 +24,7 @@ export class Role {
   // Role type (visible or non-visible) for administartors
   @Column({
     type: 'enum',
-    enum: ['visible', 'non-visible'],
+    enum: ['visible', 'invisible'],
   })
-  type: 'visible' | 'non-visible' ;
+  type: 'visible' | 'invisible' ;
 }
