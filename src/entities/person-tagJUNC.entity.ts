@@ -6,7 +6,7 @@ import { PersonTag } from './person-tag.entity';
 
 @Entity({ name: 'person.tagJUNC' })
 export class PersonTagJUNC {
-  // Person TagCNT Number
+  // Person TagJUNC Number
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -14,7 +14,7 @@ export class PersonTagJUNC {
   @Column()
   person_id: number;
 
-  // Person TagCNT relationship with Person
+  // Person TagJUNC relationship with Person
   @ManyToOne(() => Person)
   person: Person;
 
@@ -22,7 +22,7 @@ export class PersonTagJUNC {
   @Column()
   tag_id: number;
 
-  // Person TagCNT relationship with Tag
+  // Person TagJUNC relationship with Tag
   @ManyToOne(() => PersonTag)
   tag: PersonTag;
 }

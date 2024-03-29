@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
+// Entities
 import { AttendanceDate } from './entities/attendance-date.entity';
 import { AttendanceJUNC } from './entities/attendanceJUNC.entity';
 import { Part } from './entities/group-department-part.entity';
@@ -17,7 +18,7 @@ import { FamilyJUNC } from './entities/person-familyJUNC.entity';
 import { PersonImage } from './entities/person-image.entity';
 import { PersonRecord } from './entities/person-record.entity';
 import { PersonTag } from './entities/person-tag.entity';
-import { PersonTagCNT } from './entities/person-tagJUNC.entity';
+import { PersonTagJUNC } from './entities/person-tagJUNC.entity';
 import { Person } from './entities/person.entity';
 import { PostComment } from './entities/post-comment.entity';
 import { PostImage } from './entities/post-image.entity';
@@ -51,7 +52,7 @@ dotenv.config();
         PersonImage,
         PersonRecord,
         PersonTag,
-        PersonTagCNT,
+        PersonTagJUNC,
         Person,
         PostComment,
         PostImage,
@@ -62,7 +63,7 @@ dotenv.config();
       ],
       synchronize: false,
     }),
-    AuthModule,
+    // AuthModule,
     ConfigModule.forRoot({isGlobal: true}),
   ],
   controllers: [AppController],
