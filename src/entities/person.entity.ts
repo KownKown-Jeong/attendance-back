@@ -7,10 +7,11 @@ import { Address } from './person-address.entity';
 import { FamilyJUNC } from './person-familyJUNC.entity';
 import { PersonImage } from './person-image.entity';
 import { PersonRecord } from './person-record.entity';
-import { PersonTagCNT } from './person-tagJUNC.entity';
+import { PersonTagJUNC } from './person-tagJUNC.entity';
 import { Post } from './post.entity';
 import { PostComment } from './post-comment.entity';
 import { User } from './user.entity';
+import { Gender } from '@common/enums';           // enums
 
 @Entity({ name: 'person' })
 export class Person {
@@ -18,13 +19,9 @@ export class Person {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // User ID
-  @Column()
-  user_id: number;
-
   // Person relationship with User
-  @OneToOne(() => User)
-  @JoinColumn()
+  @OneToOne(() => User, { nullable: true })
+  @JoinColumn({ name: 'id' })
   user: User;
 
   // Person name
@@ -32,20 +29,21 @@ export class Person {
   name: string;
 
   // Gender
-  @Column({ type: 'enum', enum: ['man', 'woman'], })
-  type: 'man' | 'woman';
+  @Column({ type: 'enum', enum: Gender })
+  gender: Gender;
 
   // Date of birth, nullable
   @Column({ nullable: true })
   date_of_birth: Date;
 
-  // Phone number, except 010, nullable
+  // Phone number, nullable
   @Column({ nullable: true })
-  person_image_id: number;
+  phone_number: string;
 
   // Address, nullable
   // Person relationship with Address
   @ManyToOne(() => Address, address => address.residents, { nullable: true })
+  @JoinColumn({ name: 'address_id' })
   address: Address;
 
   // Family
@@ -53,31 +51,33 @@ export class Person {
   // Parent
   @OneToMany(() => FamilyJUNC, familyJUNC => familyJUNC.parent, { nullable: true })
   parent: FamilyJUNC[];
+
   // Children
   @OneToMany(() => FamilyJUNC, familyJUNC => familyJUNC.child, { nullable: true })
   children: FamilyJUNC[];
-  
+
   // Profile image
   // Person relationship with Image, nullable
   @OneToMany(() => PersonImage, (personImage) => personImage.person, { nullable: true })
   images: PersonImage;
-  
+
   // Records
   // Person relationship with Record as student, nullable
   @OneToMany(() => PersonRecord, (record) => record.student, { nullable: true })
   studentRecords: PersonRecord[];
+
   // Person relationship with Record as teacher, nullable
   @OneToMany(() => PersonRecord, (record) => record.teacher, { nullable: true })
   teacherRecords: PersonRecord[];
-  
+
   // Tags
   // Person relationship with TagJUNC, which is a JUNCTION table, nullable
-  @OneToMany(() => PersonTagCNT, (personTagCNT) => personTagCNT.person, { nullable: true })
-  tags: PersonTagCNT[];
+  @OneToMany(() => PersonTagJUNC, (personTagJUNC) => personTagJUNC.person, { nullable: true })
+  tags: PersonTagJUNC[];
 
   // Roles
-  // Person relationship with RoleJUNC, which is a JUNCTION table
-  @OneToMany(() => RoleJUNC, roleJUNC => roleJUNC.person, )
+  // Person relationship with RoleJUNC, which is a JUNCTION table, nullable
+  @OneToMany(() => RoleJUNC, roleJUNC => roleJUNC.person, { nullable: true })
   roleJUNCs: RoleJUNC[];
 
   // Posts
@@ -94,5 +94,4 @@ export class Person {
   // Person relationship with Attendance, nullable
   @OneToMany(() => AttendanceJUNC, attendanceJUNC => attendanceJUNC.person, { nullable: true })
   attendances: AttendanceJUNC[];
-
 }

@@ -13,7 +13,7 @@ export class User {
   @Column({ unique: true })
   user_id: string;
 
-  // User password hash
+  // User hashed password 
   @Column()
   user_password: string;
 
