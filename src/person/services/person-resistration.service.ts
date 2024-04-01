@@ -1,27 +1,23 @@
-// src/user/services/personResistration.service.ts
-import { Injectable } from '@nestjs/common';    // NEST
-// Entities & Repositories
-import { Address } from '@entities/person-address.entity';
-import { PersonTag } from '@entities/person-tag.entity';
-import { PersonTagJUNC } from '@entities/person-tagJUNC.entity'; 
-import { Person } from '@entities/person.entity';
-import { User } from '@entities/user.entity';
-import { aPerson } from '@user/dto/sign-up.dto';
+// src/person/services/person-resistration.service.ts
+import { Injectable } from '@nestjs/common';
+
+// Entities for injectRepositories
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Person } from '@entities/person.entity';
+
+// Typedefines for parameters
+import { Address } from '@entities/person-address.entity';
+import { User } from '@entities/user.entity';
+import { aPerson } from '@dto/sign-up.dto';
 
 @Injectable()
-export class PersonRegistrationService {
+export class PersonResistrationService {
     constructor(
         @InjectRepository(Person)
         private readonly personRepository: Repository<Person>,
-        @InjectRepository(PersonTag)
-        private readonly personTagRepository: Repository<PersonTag>,
-        @InjectRepository(PersonTagJUNC)
-        private readonly personTagJUNCRepository: Repository<PersonTagJUNC>,
     ) {}
-    // createPerson method
-    async createPerson(aPerson: aPerson, user: User | null, address: Address | null) {
+    async create(user: User | null, aPerson: aPerson, address: Address | null) {
         const person = this.personRepository.create({
             user: user,
             name: aPerson.name,
@@ -30,8 +26,9 @@ export class PersonRegistrationService {
             phone_number: aPerson.phone_number,
             address: address,
         });
-        const savedPerson = await this.personRepository.save(person);
+        const newperson = await this.personRepository.save(person);
 
+/*
         // Tagging method
         for (const tagName of aPerson.tags) {
             // Tag search : Check if the tag already exists
@@ -50,7 +47,8 @@ export class PersonRegistrationService {
             });
             await this.personTagJUNCRepository.save(personTagCNT);
         }
+*/
 
-        return savedPerson;
+        return newperson;
     }
 }

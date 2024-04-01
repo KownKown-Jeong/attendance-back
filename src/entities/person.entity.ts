@@ -46,6 +46,10 @@ export class Person {
   @JoinColumn({ name: 'address_id' })
   address: Address;
 
+  // Verification
+  @Column({ default: false })
+  verified: boolean;
+
   // Family
   // Person relationship with FamilyJUNC, which is a JUNCTION table, nullable
   // Parent

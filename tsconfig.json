@@ -10,8 +10,10 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "paths": {
+    "paths": {   
+      "@auth/*": ["src/auth/*"],
       "@common/*": ["src/common/*"],
+      "@dto/*": ["src/dto/*"],
       "@entities/*": ["src/entities/*"],
       "@user/*": ["src/user/*"],
     },

@@ -1,18 +1,20 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthController } from './auth.controller';
+// src/auth/auth.controller.ts
+import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { JwtGuard } from './jwt/jwt-guard.service';
 
-describe('AuthController', () => {
-  let controller: AuthController;
+@Controller('auth')
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [AuthController],
-    }).compile();
+  @Post('login')
+  async login(@Body() credentials: { username: string; password: string }) {
+    return this.authService.login(credentials);
+  }
 
-    controller = module.get<AuthController>(AuthController);
-  });
-
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
-});
+  @UseGuards(JwtGuard)
+  @Post('logout')
+  async logout(@Body() token: { token: string }) {
+    return this.authService.logout(token.token);
+  }
+}

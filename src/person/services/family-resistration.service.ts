@@ -1,30 +1,32 @@
-// src/user/services/familyResistration.service.ts
-import { Injectable } from '@nestjs/common';    // NEST
-// Entities & Repositories
-import { Address } from '@entities/person-address.entity';
-import { FamilyJUNC } from '@entities/person-familyJUNC.entity';
-import { Person } from '@entities/person.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable } from '@nestjs/common';
 import { FamilyRelationType } from '@common/enums';
-// Services
-import { PersonRegistrationService } from '@user/services/personResistration.service';
-import { familyMembers } from '@user/dto/sign-up.dto';
 
+// Entities for injectRepositories
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { FamilyJUNC } from '@entities/person-familyJUNC.entity';
+
+// Services
+import { PersonResistrationService } from './person-resistration.service';
+
+// Typedefines for parameters
+import { familyMembers } from '@dto/sign-up.dto';
+import { Address } from '@entities/person-address.entity';
+import { Person } from '@entities/person.entity';
 
 @Injectable()
-export class FamilyRegistrationService {
+export class FamilyResistrationService {
+    
     constructor(
+        private readonly personResistrationService: PersonResistrationService,
         @InjectRepository(FamilyJUNC)
         private readonly familyJUNCRepository: Repository<FamilyJUNC>,
-        private readonly personRegistrationService: PersonRegistrationService,
     ) {}
 
-    // createFamily method
-    async createFamily(familyMembers: familyMembers[], person: Person, address: Address | null) {
+    async create(familyMembers: familyMembers[], address: Address | null, person: Person) {
         for(const member of familyMembers){
             // newPerson registration
-            const newPerson = await this.personRegistrationService.createPerson(member.aPerson, null, address);
+            const newPerson = await this.personResistrationService.create(null, member.aPerson, address);
 
             let parenT = null;
             let chilD = null;
