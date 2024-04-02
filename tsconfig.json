@@ -11,11 +11,10 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {   
-      "@auth/*": ["src/auth/*"],
       "@common/*": ["src/common/*"],
       "@dto/*": ["src/dto/*"],
       "@entities/*": ["src/entities/*"],
-      "@user/*": ["src/user/*"],
+      "@modules/*": ["src/modules/*"],
     },
     "incremental": true,
     "skipLibCheck": true,

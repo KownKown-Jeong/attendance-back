@@ -1,10 +1,15 @@
-// src/auth/jwt/jwt-guard.service.ts
+// src/modules/auth/jwt/jwt-guard.service.ts
+// The JwtGuard service used to protect routes using JWT.
+
+// Imports (Self/Module/Controller/Service)
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { JwtService } from './jwt.service';
 
 @Injectable()
 export class JwtGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -13,7 +18,7 @@ export class JwtGuard implements CanActivate {
       return false;
     }
     try {
-      const payload = await this.jwtService.verifyToken(token);
+      const payload = await this.jwtService.verify(token);
       request.user = payload;
       return true;
     } catch (error) {
@@ -26,26 +31,3 @@ export class JwtGuard implements CanActivate {
     return type === 'Bearer' ? token : undefined;
   }
 }
-
-/*
-@Injectable()
-export class JwtGuard implements CanActivate {
-  constructor(private readonly authService: AuthService) {}
-
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const token = request.cookies['jwt'];
-
-    if (!token) {
-      throw new UnauthorizedException('No token provided');
-    }
-
-    try {
-      await this.authService.verifyToken(token);
-      return true;
-    } catch (error) {
-      throw new UnauthorizedException('Invalid token');
-    }
-  }
-}
-*/

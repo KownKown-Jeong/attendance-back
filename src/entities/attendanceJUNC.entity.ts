@@ -1,6 +1,6 @@
 // src/entities/attendance.entity.ts
 // The entity class for the attendance JUNCTION table
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { AttendanceDate } from './attendance-date.entity';
 import { RoleJUNC } from './group-roleJUNCentity';
 import { Person } from './person.entity';
@@ -17,6 +17,7 @@ export class AttendanceJUNC {
 
   // Attendance relationship with Person
   @ManyToOne(() => Person, person => person.attendances)
+  @JoinColumn({ name: 'person_id' })
   person: Person;
 
   // RoleJUNC ID
@@ -25,7 +26,8 @@ export class AttendanceJUNC {
 
   // Attendance relationship with RoleJUNC
   @ManyToOne(() => RoleJUNC, roleJUNC => roleJUNC.attendances)
-  roleJUNCs: RoleJUNC;
+  @JoinColumn({ name: 'person_role_id' })
+  roleJUNC: RoleJUNC;
 
   // Attendance Date ID
   @Column()
@@ -33,6 +35,7 @@ export class AttendanceJUNC {
 
   // Attendance relationship with AttendanceDate
   @ManyToOne(() => AttendanceDate, attendanceDate => attendanceDate.attendances)
+  @JoinColumn({ name: 'attendance_date_id' })
   attendance_date: AttendanceDate;
 
   // Status

@@ -9,6 +9,10 @@ export class AttendanceDate {
   @PrimaryGeneratedColumn()
   id: number;
 
+  // AttendanceDate relationship with Attendance, nullable
+  @OneToMany(() => AttendanceJUNC, attendanceJUNC => attendanceJUNC.attendance_date, { nullable: true })
+  attendances: AttendanceJUNC[];
+  
   // Date
   @Column()
   date: Date;
@@ -20,9 +24,4 @@ export class AttendanceDate {
   // Date description
   @Column({ nullable: true })
   description: string;
-
-  // AttendanceDate relationship with Attendance, nullable
-  @OneToMany(() => AttendanceJUNC, attendanceJUNC => attendanceJUNC.attendance_date, { nullable: true })
-  attendances: AttendanceJUNC[];
-
 }

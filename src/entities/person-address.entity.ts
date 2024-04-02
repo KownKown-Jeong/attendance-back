@@ -9,12 +9,12 @@ export class Address {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // Address
-  @Column()
-  street: string;
-
   // Address relationship with Person
   // One address can have multiple residents, connected with this field
   @OneToMany(() => Person, person => person.address)
   residents: Person[];
+
+  // Address
+  @Column()
+  street: string;
 }

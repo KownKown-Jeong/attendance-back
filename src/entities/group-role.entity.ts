@@ -9,6 +9,10 @@ export class Role {
   @PrimaryGeneratedColumn()
   id: number;
 
+  // Role relationship with RoleJUNC, which is a JUNCTION table, nullable
+  @OneToMany(() => RoleJUNC, roleJUNC => roleJUNC.role, { nullable: true })
+  roleJUNCs: RoleJUNC[];
+
   // Role name
   @Column()
   name: string;
@@ -16,10 +20,6 @@ export class Role {
   // Role description
   @Column({ nullable: true })
   description: string;
-
-  // Role relationship with RoleJUNC, which is a JUNCTION table, nullable
-  @OneToMany(() => RoleJUNC, roleJUNC => roleJUNC.role, { nullable: true })
-  roleJUNCs: RoleJUNC[];
 
   // Role type (visible or non-visible) for administartors
   @Column({

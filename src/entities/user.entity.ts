@@ -9,6 +9,10 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
+  // User relationship with Person
+  @OneToOne(() => Person, (person) => person.user, )
+  person: Person;
+
   // User ID(Phone number, except 010)
   @Column({ unique: true })
   user_id: string;
@@ -17,7 +21,5 @@ export class User {
   @Column()
   user_password: string;
 
-  // User relationship with Person
-  @OneToOne(() => Person, (person) => person.user, )
-  person: Person;
+
 }

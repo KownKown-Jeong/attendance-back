@@ -1,9 +1,10 @@
-// src/person/services/person-resistration.service.ts
-import { Injectable } from '@nestjs/common';
+// src/modules/person/services/person-resistration.service.ts
+// The PersonResistrationService used to register a new person.
 
-// Entities for injectRepositories
-import { Repository } from 'typeorm';
+// Imports (Self/Module/Controller/Service)
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Person } from '@entities/person.entity';
 
 // Typedefines for parameters

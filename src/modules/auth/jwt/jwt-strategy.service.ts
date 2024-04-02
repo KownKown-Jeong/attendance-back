@@ -1,7 +1,10 @@
-// src/auth/jwt/jwt-stratergy.service.ts
+// src/modules/auth/jwt/jwt-strategy.service.ts
+// The JwtStrategy service used to validate JWT.
+
+// Imports (Self/Module/Controller/Service)
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Strategy, ExtractJwt } from 'passport-jwt';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

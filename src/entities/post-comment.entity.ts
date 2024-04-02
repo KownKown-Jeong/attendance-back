@@ -1,7 +1,7 @@
 // src/entities/post-comment.entity.ts
 // The entity class for the post comment table
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { Post } from './post.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { PostBody } from './post-body.entity';
 import { Person } from './person.entity';
 
 @Entity({ name: 'post.comment' })
@@ -15,8 +15,9 @@ export class PostComment {
   post_id: number;
 
   // Comment relationship with Post
-  @ManyToOne(() => Post, post => post.comments)
-  post: Post;
+  @ManyToOne(() => PostBody, postBody => postBody.postComments)
+  @JoinColumn({ name: 'post_id' })
+  postBody: PostBody;
 
   // Author(Person) ID
   @Column()
@@ -24,6 +25,7 @@ export class PostComment {
 
   // Comment relationship with Person
   @ManyToOne(() => Person, person => person.postComments)
+  @JoinColumn({ name: 'author_id' })
   person: Person;
 
   // Comment content

@@ -1,13 +1,13 @@
 // src/entities/post.entity.ts
 // The entity class for the post table
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Person } from './person.entity';
 import { PostImage } from './post-image.entity';
 import { PostComment } from './post-comment.entity';
 import { PostTagJUNC } from './post-tagJUNC.entity';
 
-@Entity({ name: 'post' })
-export class Post {
+@Entity({ name: 'post_body' })
+export class PostBody {
   // Post number
   @PrimaryGeneratedColumn()
   id: number;
@@ -17,7 +17,7 @@ export class Post {
   person_id: number;
 
   // Post relationship with Person
-  @ManyToOne(() => Person, (person) => person.posts)
+  @ManyToOne(() => Person, (person) => person.postBodys)
   @JoinColumn({ name: 'person_id' })
   person: Person;
 
@@ -26,9 +26,8 @@ export class Post {
   post_image_id: number;
 
   // Post relationship with PostImage, nullable
-  @OneToOne(() => PostImage, (image) => image.post, { nullable: true })
-  @JoinColumn({ name: 'post_image_id' })
-  image: PostImage;
+  @OneToMany(() => PostImage, (postImage) => postImage.postBody, { nullable: true })
+  postImages: PostImage[];
 
   // Post title
   @Column('text')
@@ -39,19 +38,12 @@ export class Post {
   content: string;
   
   // Post creation time
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  created_at: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
   // Post update time
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
-  updated_at: Date;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 
   // Post type
   @Column({
@@ -61,10 +53,10 @@ export class Post {
   type: 'visible' | 'non-visible';
 
   // Post relationship with PostComment, nullable
-  @OneToMany(() => PostComment, (comment) => comment.post, { nullable: true })
-  comments: PostComment[];
+  @OneToMany(() => PostComment, (postComment) => postComment.postBody, { nullable: true })
+  postComments: PostComment[];
 
   // Post relationship with PostTagJUNC, nullable
-  @OneToMany(() => PostTagJUNC, (postTagJUNC) => postTagJUNC.post, { nullable: true })
+  @OneToMany(() => PostTagJUNC, (postTagJUNC) => postTagJUNC.postBody, { nullable: true })
   postTagJUNCs: PostTagJUNC[];
 }

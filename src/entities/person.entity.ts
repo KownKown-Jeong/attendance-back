@@ -8,7 +8,7 @@ import { FamilyJUNC } from './person-familyJUNC.entity';
 import { PersonImage } from './person-image.entity';
 import { PersonRecord } from './person-record.entity';
 import { PersonTagJUNC } from './person-tagJUNC.entity';
-import { Post } from './post.entity';
+import { PostBody } from './post-body.entity';
 import { PostComment } from './post-comment.entity';
 import { User } from './user.entity';
 import { Gender } from '@common/enums';           // enums
@@ -41,6 +41,9 @@ export class Person {
   phone_number: string;
 
   // Address, nullable
+  @Column({ nullable: true })
+  address_id: Number;
+
   // Person relationship with Address
   @ManyToOne(() => Address, address => address.residents, { nullable: true })
   @JoinColumn({ name: 'address_id' })
@@ -86,8 +89,8 @@ export class Person {
 
   // Posts
   // Person relationship with Post as author, nullable
-  @OneToMany(() => Post, post => post.person, { nullable: true })
-  posts: Post[];
+  @OneToMany(() => PostBody, postBody => postBody.person, { nullable: true })
+  postBodys: PostBody[];
 
   // Post Comments
   // Person relationship with PostComment as author, nullable

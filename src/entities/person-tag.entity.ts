@@ -8,12 +8,14 @@ export class PersonTag {
   // Tag Number
   @PrimaryGeneratedColumn()
   id: number;
+  
+  // Tag relationship with PersonTagCNT
+  @OneToMany(() => PersonTagJUNC, (personTagCNT) => personTagCNT.tag)
+  personTagCNTs: PersonTagJUNC[];
 
   // Tag name
   @Column()
   name: string;
 
-  // Tag relationship with PersonTagCNT
-  @OneToMany(() => PersonTagJUNC, (personTagCNT) => personTagCNT.tag)
-  personTagCNTs: PersonTagJUNC[];
+
 }

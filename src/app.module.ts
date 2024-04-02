@@ -1,14 +1,16 @@
 // src/app.module.ts
 
-// Modules
+// Imports (Self/Module/Controller/Service)
 import { Module, MiddlewareConsumer } from '@nestjs/common';
-import { AuthModule } from '@auth/auth.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-// Controllers
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
-// Services
+import { AuthModule } from '@modules/auth/auth.module';
+import { PersonModule } from '@modules/person/person.module';
+import { PostModule } from '@modules/post/post.module';
+import { UserModule } from '@modules/user/user.module';
 import { AppService } from './app.service';
 // Entities
+import { TypeOrmModule } from '@nestjs/typeorm';
 // In atts
 import { AttendanceDate } from './entities/attendance-date.entity';
 import { AttendanceJUNC } from './entities/attendanceJUNC.entity';
@@ -30,12 +32,11 @@ import { PostComment } from './entities/post-comment.entity';
 import { PostImage } from './entities/post-image.entity';
 import { PostTag } from './entities/post-tag.entity';
 import { PostTagJUNC } from './entities/post-tagJUNC.entity';
-import { Post } from './entities/post.entity';
+import { Post } from './entities/post-body.entity';
 // In auth
 import { User } from './entities/user.entity';
 
-import { ConfigModule } from '@nestjs/config';
-import { PersonModule } from './person/person.module';
+
 import * as dotenv from 'dotenv';
 import * as cookieParser from 'cookie-parser';
 dotenv.config();
@@ -43,6 +44,9 @@ dotenv.config();
 @Module({
   imports: [
     AuthModule,
+    PersonModule,
+    PostModule,
+    UserModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'testdatabase.czcw84ge6p5t.ap-southeast-2.rds.amazonaws.com',
@@ -51,30 +55,16 @@ dotenv.config();
       password: 'dbclqn2020',
       database: 'testdatabase',
       entities: [ 
-        AttendanceDate, 
-        AttendanceJUNC, 
-        Part, 
-        Department,
-        Role, 
-        RoleJUNC,
-        Address,
-        FamilyJUNC,
-        PersonImage,
-        PersonRecord,
-        PersonTag,
-        PersonTagJUNC,
-        Person,
-        PostComment,
-        PostImage,
-        PostTag,
-        PostTagJUNC,
-        Post,
+        AttendanceDate, AttendanceJUNC, 
+        Part, Department,Role, RoleJUNC,
+        Address, FamilyJUNC, PersonImage, PersonRecord, PersonTag, PersonTagJUNC, Person,
+        PostComment, PostImage, PostTag, PostTagJUNC, Post,
         User, 
       ],
       synchronize: false,
     }),
     ConfigModule.forRoot({isGlobal: true}),
-    PersonModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],

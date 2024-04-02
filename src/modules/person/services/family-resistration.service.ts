@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { FamilyRelationType } from '@common/enums';
+// src/modules/person/services/family-resistration.service.ts
+// The FamilyResistrationService used to make junction between family members.
 
-// Entities for injectRepositories
+// Imports (Self/Module/Controller/Service)
+import { FamilyRelationType } from '@common/enums';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FamilyJUNC } from '@entities/person-familyJUNC.entity';
-
-// Services
 import { PersonResistrationService } from './person-resistration.service';
 
 // Typedefines for parameters

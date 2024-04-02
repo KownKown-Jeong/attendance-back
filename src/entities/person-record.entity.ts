@@ -1,6 +1,6 @@
 // src/entities/person-record.entity.ts
 // The entity class for the person record table
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Person } from './person.entity';
 
 @Entity({ name: 'person.record' })
@@ -15,6 +15,7 @@ export class PersonRecord {
 
   // Record relationship with Student
   @ManyToOne(() => Person)
+  @JoinColumn({ name: 'student_id' })
   student: Person;
 
   // Teacher ID
@@ -23,6 +24,7 @@ export class PersonRecord {
 
   // Record relationship with Teacher
   @ManyToOne(() => Person)
+  @JoinColumn({ name: 'teacher_id' })
   teacher: Person;
 
   // Record content
