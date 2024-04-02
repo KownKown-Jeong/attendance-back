@@ -6,7 +6,7 @@ import { PostImage } from './post-image.entity';
 import { PostComment } from './post-comment.entity';
 import { PostTagJUNC } from './post-tagJUNC.entity';
 
-@Entity({ name: 'post_body' })
+@Entity({ name: 'post.body' })
 export class PostBody {
   // Post number
   @PrimaryGeneratedColumn()

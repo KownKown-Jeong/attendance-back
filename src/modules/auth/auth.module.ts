@@ -35,6 +35,6 @@ function getExpirationTime() {
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtService, JwtGuard, JwtStrategy],
-  exports: [JwtGuard],
+  exports: [JwtService, JwtGuard],
 })
 export class AuthModule {}

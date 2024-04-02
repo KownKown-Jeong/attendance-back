@@ -1,0 +1,757 @@
+// src/entities/attendance-date.entity.ts
+// The entity class for the attendance_date table
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { AttendanceJUNC } from './attendanceJUNC.entity';
+
+@Entity({ name: 'attendance.date' })
+export class AttendanceDate {
+  // Attendance Date Number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // AttendanceDate relationship with Attendance, nullable
+  @OneToMany(() => AttendanceJUNC, attendanceJUNC => attendanceJUNC.attendance_date, { nullable: true })
+  attendances: AttendanceJUNC[];
+  
+  // Date
+  @Column()
+  date: Date;
+
+  // Is it a regular date?
+  @Column()
+  is_regular: boolean;
+
+  // Date description
+  @Column({ nullable: true })
+  description: string;
+}
+
+// src/entities/attendance.entity.ts
+// The entity class for the attendance JUNCTION table
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { AttendanceDate } from './attendance-date.entity';
+import { RoleJUNC } from './group-roleJUNCentity';
+import { Person } from './person.entity';
+
+@Entity({ name: 'attendanceJUNC' })
+export class AttendanceJUNC {
+  // Attendance Number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // Person ID
+  @Column()
+  person_id: number;
+
+  // Attendance relationship with Person
+  @ManyToOne(() => Person, person => person.attendances)
+  @JoinColumn({ name: 'person_id' })
+  person: Person;
+
+  // RoleJUNC ID
+  @Column()
+  person_role_id: number;
+
+  // Attendance relationship with RoleJUNC
+  @ManyToOne(() => RoleJUNC, roleJUNC => roleJUNC.attendances)
+  @JoinColumn({ name: 'person_role_id' })
+  roleJUNC: RoleJUNC;
+
+  // Attendance Date ID
+  @Column()
+  attendance_date_id: number;
+
+  // Attendance relationship with AttendanceDate
+  @ManyToOne(() => AttendanceDate, attendanceDate => attendanceDate.attendances)
+  @JoinColumn({ name: 'attendance_date_id' })
+  attendance_date: AttendanceDate;
+
+  // Status
+  @Column({ nullable: true })
+  status: string;
+
+  // Entry time
+  @Column({ nullable: true })
+  entry_time: string;
+
+  // Exit time
+  @Column({ nullable: true })
+  exit_time: string;
+}
+
+// src/entities/group-department-part.entity.ts
+// The entity class for the part table
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
+import { Department } from './group-department.entity';
+import { RoleJUNC } from './group-roleJUNCentity';
+
+@Entity({ name: 'group.department.part' })
+export class Part {
+  // Part Number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // Part relationship with RoleJUNC, which is a JUNCTION table, nullable
+  @OneToMany(() => RoleJUNC, roleJUNC => roleJUNC.part, { nullable: true })
+  roleJUNCs: RoleJUNC[];
+ 
+  // Part relationship with Department
+  @ManyToOne(() => Department, department => department.parts)
+  @JoinColumn({ name: 'name' })
+  department: Department;
+
+  // Part name
+  @Column()
+  name: string;
+
+  // Part description, nullable
+  @Column({ nullable: true })
+  description: string;
+
+  // Part start date, nullable
+  @Column({ type: 'date', nullable: true  })
+  startDate: Date;
+
+  // Part end date, nullable
+  @Column({ type: 'date', nullable: true })
+  endDate: Date;
+}
+
+// src/entities/group-department.entity.ts
+// The entity class for the department table
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
+import { Part } from './group-department-part.entity';
+
+@Entity({ name: 'group.department' })
+export class Department {
+  // Department Number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // Department name
+  @Column()
+  name: string;
+
+  // Department description, nullable
+  @Column({ nullable: true })
+  description: string;
+
+  // Department relationship with Part, nullable
+  @OneToMany(() => Part, part => part.department, { nullable: true })
+  parts: Part[];
+
+  // Department parent ID, nullable
+  @Column({ nullable: true })
+  parent_id: number;
+
+  // Department able to connect each other with Parent and Children
+  // Department relationship with Parent-Department, nullable
+  @ManyToOne(() => Department, department => department.children, { nullable: true } )
+  @JoinColumn({ name: 'parent_id' })
+  parent: Department;
+
+  // Department relationship with Children-Departments, nullable
+  @OneToMany(() => Department, department => department.parent, { nullable: true })
+  children: Department[];
+
+  // Department start date, nullable
+  @Column({ type: 'date',  nullable: true })
+  startDate: Date;
+
+  // Department end date, nullable
+  @Column({ type: 'date', nullable: true })
+  endDate: Date;
+}
+
+// src/entities/group-role.entity.ts
+// The entity class for the role table
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { RoleJUNC } from './group-roleJUNCentity';
+
+@Entity({ name: 'group.role' })
+export class Role {
+  // Role Number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // Role relationship with RoleJUNC, which is a JUNCTION table, nullable
+  @OneToMany(() => RoleJUNC, roleJUNC => roleJUNC.role, { nullable: true })
+  roleJUNCs: RoleJUNC[];
+
+  // Role name
+  @Column()
+  name: string;
+
+  // Role description
+  @Column({ nullable: true })
+  description: string;
+
+  // Role type (visible or non-visible) for administartors
+  @Column({
+    type: 'enum',
+    enum: ['visible', 'invisible'],
+  })
+  type: 'visible' | 'invisible' ;
+}
+
+// src/entities/group-department-part-person-role-cnt.entity.ts
+// The entity class for the part & role & person JUNCTION table
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { AttendanceJUNC } from './attendanceJUNC.entity';
+import { Part } from './group-department-part.entity';
+import { Role } from './group-role.entity';
+import { Person } from './person.entity';
+
+@Entity({ name: 'group.roleJUNC' })
+export class RoleJUNC {
+  // RoleJUNC Number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // RoleJUNC relationship with Attendance, nullable
+  @OneToMany(() => AttendanceJUNC, attendanceJUNC => attendanceJUNC.roleJUNC, { nullable: true })
+  attendances: AttendanceJUNC[];
+
+  // Part ID
+  @Column()
+  part_id: number;
+
+  // RoleJUNC relationship with GroupPart
+  @ManyToOne(() => Part, part => part.roleJUNCs)
+  @JoinColumn({ name: 'part_id' })
+  part: Part;
+
+  // Role 
+  @Column()
+  role_id: number;
+
+  // RoleJUNC relationship with Role
+  @ManyToOne(() => Role, role => role.roleJUNCs)
+  @JoinColumn({ name: 'role_id' })
+  role: Role;
+
+  // RoleJUNC relationship with Person
+  @ManyToOne(() => Person, person => person.roleJUNCs)
+  person: Person;
+
+  // RoleJUNC start date
+  @Column()
+  startDate: Date;
+  
+  // RoleJUNC end date
+  @Column()
+  endDate: Date;
+}
+
+// src/entities/person-address.entity.ts
+// The entity class for the address table
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Person } from './person.entity';
+
+@Entity({ name: 'person.address' })
+export class Address {
+  // Address Number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // Address relationship with Person
+  // One address can have multiple residents, connected with this field
+  @OneToMany(() => Person, person => person.address)
+  residents: Person[];
+
+  // Address
+  @Column()
+  street: string;
+}
+
+// src/entities/person-family.entity.ts
+// The entity class for the family JUNCTION table to each person
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, JoinColumn } from 'typeorm';
+import { Person } from './person.entity';
+import { FamilyRelationType } from '@common/enums';
+
+@Entity({ name: 'person.familyJUNC' })
+export class FamilyJUNC {
+  // Family number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // Parent ID
+  @Column()
+  parent_id: number;
+
+  // Family connected with this field
+  // Family relationship with Parent-Person
+  @ManyToOne(() => Person, person => person.parent)
+  @JoinColumn({ name: 'parent_id' })
+  parent: Person;
+
+  // Child ID
+  @Column()
+  child_id: number;  
+
+  // Family relationship with Children-Person
+  @ManyToOne(() => Person, person => person.children)
+  @JoinColumn({ name: 'child_id' })
+  child: Person;
+
+  // Family relation type
+  @Column({
+    type: 'enum',
+    enum: FamilyRelationType,
+  })
+  relationType: FamilyRelationType;
+}
+
+// src/entities/person-image.entity.ts
+// The entity class for the profile image table
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Person } from './person.entity';
+
+@Entity({ name: 'person.image' })
+export class PersonImage {
+  // Person Image number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // Image URL
+  @Column()
+  url: string;
+
+  // Image description 
+  @Column({ nullable: true })
+  description: string;
+
+  // Image uploaded date
+  @Column()
+  uploaded_at: Date;
+
+  // Person ID
+  @Column()
+  person_id: number;
+
+  // Image relationship with Person
+  @ManyToOne(() => Person, (person) => person.images, { nullable: true })
+  @JoinColumn({ name: 'person_id' })
+  person: Person;
+}
+
+// src/entities/person-record.entity.ts
+// The entity class for the person record table
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Person } from './person.entity';
+
+@Entity({ name: 'person.record' })
+export class PersonRecord {
+  // Person Record Number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // Student ID
+  @Column()
+  student_id: number;
+
+  // Record relationship with Student
+  @ManyToOne(() => Person)
+  @JoinColumn({ name: 'student_id' })
+  student: Person;
+
+  // Teacher ID
+  @Column()
+  teacher_id: number;
+
+  // Record relationship with Teacher
+  @ManyToOne(() => Person)
+  @JoinColumn({ name: 'teacher_id' })
+  teacher: Person;
+
+  // Record content
+  @Column()
+  content: string;
+
+  // Record created date
+  @Column()
+  created_at: Date;
+
+  // Record updated date
+  @Column()
+  updated_at: Date;
+
+  // Record type
+  @Column({
+    type: 'enum',
+    enum: ['visible', 'invisible'],
+  })
+  type: 'visible' | 'invisible';
+}
+
+// src/entities/person-tag.entity.ts
+// The entity class for the personal tag table
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { PersonTagJUNC } from './person-tagJUNC.entity';
+
+@Entity({ name: 'person.tag' })
+export class PersonTag {
+  // Tag Number
+  @PrimaryGeneratedColumn()
+  id: number;
+  
+  // Tag relationship with PersonTagCNT
+  @OneToMany(() => PersonTagJUNC, (personTagCNT) => personTagCNT.tag)
+  personTagCNTs: PersonTagJUNC[];
+
+  // Tag name
+  @Column()
+  name: string;
+
+
+}
+
+// src/entities/person-tagJUNC.entity.ts
+// The entity class for the person & tag JUNCTION table
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Person } from './person.entity';
+import { PersonTag } from './person-tag.entity';
+
+@Entity({ name: 'person.tagJUNC' })
+export class PersonTagJUNC {
+  // Person TagJUNC Number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // Person ID
+  @Column()
+  person_id: number;
+
+  // Person TagJUNC relationship with Person
+  @ManyToOne(() => Person)
+  @JoinColumn({ name: 'person_id' })
+  person: Person;
+
+  // Tag ID
+  @Column()
+  tag_id: number;
+
+  // Person TagJUNC relationship with Tag
+  @ManyToOne(() => PersonTag)
+  @JoinColumn({ name: 'tag_id' })
+  tag: PersonTag;
+}
+
+// src/entities/person.entity.ts
+// The entity class for the person table
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import { AttendanceJUNC } from './attendanceJUNC.entity';
+import { RoleJUNC } from './group-roleJUNCentity';
+import { Address } from './person-address.entity';
+import { FamilyJUNC } from './person-familyJUNC.entity';
+import { PersonImage } from './person-image.entity';
+import { PersonRecord } from './person-record.entity';
+import { PersonTagJUNC } from './person-tagJUNC.entity';
+import { PostBody } from './post-body.entity';
+import { PostComment } from './post-comment.entity';
+import { User } from './user.entity';
+import { Gender } from '@common/enums';           // enums
+
+@Entity({ name: 'person' })
+export class Person {
+  // Person Number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // Person relationship with User
+  @OneToOne(() => User, { nullable: true })
+  @JoinColumn({ name: 'id' })
+  user: User;
+
+  // Person name
+  @Column()
+  name: string;
+
+  // Gender
+  @Column({ type: 'enum', enum: Gender })
+  gender: Gender;
+
+  // Date of birth, nullable
+  @Column({ nullable: true })
+  date_of_birth: Date;
+
+  // Phone number, nullable
+  @Column({ nullable: true })
+  phone_number: string;
+
+  // Address, nullable
+  @Column({ nullable: true })
+  address_id: Number;
+
+  // Person relationship with Address
+  @ManyToOne(() => Address, address => address.residents, { nullable: true })
+  @JoinColumn({ name: 'address_id' })
+  address: Address;
+
+  // Verification
+  @Column({ default: false })
+  verified: boolean;
+
+  // Family
+  // Person relationship with FamilyJUNC, which is a JUNCTION table, nullable
+  // Parent
+  @OneToMany(() => FamilyJUNC, familyJUNC => familyJUNC.parent, { nullable: true })
+  parent: FamilyJUNC[];
+
+  // Children
+  @OneToMany(() => FamilyJUNC, familyJUNC => familyJUNC.child, { nullable: true })
+  children: FamilyJUNC[];
+
+  // Profile image
+  // Person relationship with Image, nullable
+  @OneToMany(() => PersonImage, (personImage) => personImage.person, { nullable: true })
+  images: PersonImage;
+
+  // Records
+  // Person relationship with Record as student, nullable
+  @OneToMany(() => PersonRecord, (record) => record.student, { nullable: true })
+  studentRecords: PersonRecord[];
+
+  // Person relationship with Record as teacher, nullable
+  @OneToMany(() => PersonRecord, (record) => record.teacher, { nullable: true })
+  teacherRecords: PersonRecord[];
+
+  // Tags
+  // Person relationship with TagJUNC, which is a JUNCTION table, nullable
+  @OneToMany(() => PersonTagJUNC, (personTagJUNC) => personTagJUNC.person, { nullable: true })
+  tags: PersonTagJUNC[];
+
+  // Roles
+  // Person relationship with RoleJUNC, which is a JUNCTION table, nullable
+  @OneToMany(() => RoleJUNC, roleJUNC => roleJUNC.person, { nullable: true })
+  roleJUNCs: RoleJUNC[];
+
+  // Posts
+  // Person relationship with Post as author, nullable
+  @OneToMany(() => PostBody, postBody => postBody.person, { nullable: true })
+  postBodys: PostBody[];
+
+  // Post Comments
+  // Person relationship with PostComment as author, nullable
+  @OneToMany(() => PostComment, postComment => postComment.person, { nullable: true })
+  postComments: PostComment[];
+
+  // Attendance
+  // Person relationship with Attendance, nullable
+  @OneToMany(() => AttendanceJUNC, attendanceJUNC => attendanceJUNC.person, { nullable: true })
+  attendances: AttendanceJUNC[];
+}
+
+// src/entities/post.entity.ts
+// The entity class for the post table
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Person } from './person.entity';
+import { PostImage } from './post-image.entity';
+import { PostComment } from './post-comment.entity';
+import { PostTagJUNC } from './post-tagJUNC.entity';
+
+@Entity({ name: 'post.body' })
+export class PostBody {
+  // Post number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // Person number
+  @Column()
+  person_id: number;
+
+  // Post relationship with Person
+  @ManyToOne(() => Person, (person) => person.postBodys)
+  @JoinColumn({ name: 'person_id' })
+  person: Person;
+
+  // Image number
+  @Column({ nullable: true })
+  post_image_id: number;
+
+  // Post relationship with PostImage, nullable
+  @OneToMany(() => PostImage, (postImage) => postImage.postBody, { nullable: true })
+  postImages: PostImage[];
+
+  // Post title
+  @Column('text')
+  title: string;
+
+  // Post content
+  @Column('text')
+  content: string;
+  
+  // Post creation time
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  // Post update time
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
+
+  // Post type
+  @Column({
+    type: 'enum',
+    enum: ['visible', 'non-visible'],
+  })
+  type: 'visible' | 'non-visible';
+
+  // Post relationship with PostComment, nullable
+  @OneToMany(() => PostComment, (postComment) => postComment.postBody, { nullable: true })
+  postComments: PostComment[];
+
+  // Post relationship with PostTagJUNC, nullable
+  @OneToMany(() => PostTagJUNC, (postTagJUNC) => postTagJUNC.postBody, { nullable: true })
+  postTagJUNCs: PostTagJUNC[];
+}
+
+// src/entities/post-comment.entity.ts
+// The entity class for the post comment table
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { PostBody } from './post-body.entity';
+import { Person } from './person.entity';
+
+@Entity({ name: 'post.comment' })
+export class PostComment {
+  // Post Comment number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // Post ID
+  @Column()
+  post_id: number;
+
+  // Comment relationship with Post
+  @ManyToOne(() => PostBody, postBody => postBody.postComments)
+  @JoinColumn({ name: 'post_id' })
+  postBody: PostBody;
+
+  // Author(Person) ID
+  @Column()
+  author_id: number;
+
+  // Comment relationship with Person
+  @ManyToOne(() => Person, person => person.postComments)
+  @JoinColumn({ name: 'author_id' })
+  person: Person;
+
+  // Comment content
+  @Column()
+  content: string;
+
+  // Comment created date
+  @Column()
+  created_at: Date;
+
+  // Comment updated date
+  @Column()
+  updated_at: Date;
+}
+
+// src/entities/post-image.entity.ts
+// The entity class for the post image table
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { PostBody } from './post-body.entity';
+
+@Entity({ name: 'post.image' })
+export class PostImage {
+  // Post Image number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // Post Body ID
+  @Column()
+  post_body_id: number;
+  
+  // Image relationship with Post
+  @ManyToOne(() => PostBody, (postBody) => postBody.postImages)
+  @JoinColumn({ name: 'post_body_id' })
+  postBody: PostBody;
+
+  // Image URL
+  @Column()
+  url: string;
+
+  // Image uploaded date
+  @Column()
+  uploaded_at: Date;
+}
+
+// src/entities/post-tag.entity.ts
+// The entity class for the post tag table
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { PostTagJUNC } from './post-tagJUNC.entity';
+
+@Entity({ name: 'post.tag'  })
+export class PostTag {
+  // Tag number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // Tag name
+  @Column()
+  name: string;
+
+  // Tag relationship with PostTagJUNC
+  @OneToMany(() => PostTagJUNC, postTagJUNC => postTagJUNC.tag)
+  postTagJUNCs: PostTagJUNC[];
+}
+
+// src/entities/post-tag-cnt.entity.ts
+// The entity class for the post tag JUNCTION table
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { PostBody } from './post-body.entity';
+import { PostTag } from './post-tag.entity';
+
+@Entity({ name: 'post.tagJUNC' })
+export class PostTagJUNC {
+  // Post Tag number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // Post ID
+  @Column()
+  post_id: number;
+
+  // Post relationship with Post
+  @ManyToOne(() => PostBody, postBody => postBody.postTagJUNCs)
+  @JoinColumn({ name: 'post_id' })
+  postBody: PostBody;
+
+  // Tag ID
+  @Column()
+  tag_id: number;
+
+  // Tag relationship with PostTag
+  @ManyToOne(() => PostTag, postTag => postTag.postTagJUNCs)
+  @JoinColumn({ name: 'tag_id' })
+  tag: PostTag;
+}
+
+// src/entities/user.entity.ts
+// The entity class for the user table
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { Person } from './person.entity';
+
+@Entity({ name: 'user' })
+export class User {
+  // User number
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // User relationship with Person
+  @OneToOne(() => Person, (person) => person.user, )
+  person: Person;
+
+  // User ID(Phone number, except 010)
+  @Column({ unique: true })
+  user_id: string;
+
+  // User hashed password 
+  @Column()
+  user_password: string;
+
+
+}
+

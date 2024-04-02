@@ -32,7 +32,7 @@ import { PostComment } from './entities/post-comment.entity';
 import { PostImage } from './entities/post-image.entity';
 import { PostTag } from './entities/post-tag.entity';
 import { PostTagJUNC } from './entities/post-tagJUNC.entity';
-import { Post } from './entities/post-body.entity';
+import { PostBody } from './entities/post-body.entity';
 // In auth
 import { User } from './entities/user.entity';
 
@@ -58,7 +58,7 @@ dotenv.config();
         AttendanceDate, AttendanceJUNC, 
         Part, Department,Role, RoleJUNC,
         Address, FamilyJUNC, PersonImage, PersonRecord, PersonTag, PersonTagJUNC, Person,
-        PostComment, PostImage, PostTag, PostTagJUNC, Post,
+        PostComment, PostImage, PostTag, PostTagJUNC, PostBody,
         User, 
       ],
       synchronize: false,
