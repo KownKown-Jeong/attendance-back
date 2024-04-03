@@ -49,11 +49,11 @@ dotenv.config();
     UserModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'testdatabase.czcw84ge6p5t.ap-southeast-2.rds.amazonaws.com',
+      host: 'testdatabase-1.cpqwe02ik94o.ap-northeast-2.rds.amazonaws.com',
       port: 3306,
       username: 'admin',
       password: 'dbclqn2020',
-      database: 'testdatabase',
+      database: 'testdatabase-1',
       entities: [ 
         AttendanceDate, AttendanceJUNC, 
         Part, Department,Role, RoleJUNC,
