@@ -18,7 +18,7 @@ export class PostBody {
 
   // Post relationship with Person
   @ManyToOne(() => Person, (person) => person.postBodys)
-  @JoinColumn({ name: 'person_id' })
+  @JoinColumn({ name: 'author_id' })
   person: Person;
 
   // Image number

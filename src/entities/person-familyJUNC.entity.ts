@@ -10,10 +10,6 @@ export class FamilyJUNC {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // Parent ID
-  @Column()
-  parent_id: number;
-
   // Family connected with this field
   // Family relationship with Parent-Person
   @ManyToOne(() => Person, person => person.parent)

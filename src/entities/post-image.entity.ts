@@ -15,7 +15,7 @@ export class PostImage {
   
   // Image relationship with Post
   @ManyToOne(() => PostBody, (postBody) => postBody.postImages)
-  @JoinColumn({ name: 'post_body_id' })
+  @JoinColumn({ name: 'post_id' })
   postBody: PostBody;
 
   // Image URL

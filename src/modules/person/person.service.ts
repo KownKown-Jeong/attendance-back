@@ -13,7 +13,6 @@ import { Repository } from 'typeorm';
 
 // Typedefines for parameters
 import { SignUpDto } from '@dto/sign-up.dto';
-import { User } from '@entities/user.entity';
 import { Person } from '@entities/person.entity';
 
 Injectable()
@@ -27,20 +26,27 @@ export class PersonService {
         private readonly personRepository: Repository<Person>,
     ) {}
 
-    // Person registration method
-    async create(signUpDto: SignUpDto, user: User){
-        const { aPerson, familyMembers } = signUpDto;
-        const newaddress = await this.addressResistrationService.create(aPerson.address); // Address registration
-        const newperson = await this.personResistrationService.create(user, aPerson, newaddress); // Person registration
-        await this.familyResistrationService.create(familyMembers, newaddress, newperson); // Family registration
+    // Find User by phone_number
+    async getPersonByPhoneNumber(phone_number: string): Promise<Person> {
+        const person = await this.personRepository.findOne({ where: { phone_number: phone_number } });
+        if (!person) { throw new NotFoundException('Person not found'); }
+        return person;
     }
 
+    // Person registration method
+    async create(signUpDto: SignUpDto){
+        const { aPerson, familyMembers } = signUpDto;
+        const newaddress = await this.addressResistrationService.create(aPerson.address); // Address registration
+        const newperson = await this.personResistrationService.create(aPerson, newaddress); // Person registration
+        await this.familyResistrationService.create(familyMembers, newaddress, newperson); // Family registration
+        return newperson;
+    }
+    // Find User by user_id
     async getPersonByUserId(user_id: string): Promise<Person> {
-        // Find User by user_id
         const user = await this.userService.findUser(user_id);
         // Find person by User
         const person = await this.personRepository.findOne({ where: { user: user } });
         if (!person) { throw new NotFoundException('Person not found'); }
         return person;
-      }
+    }
 }

@@ -5,6 +5,7 @@ import { Injectable, BadRequestException, NotFoundException, UnauthorizedExcepti
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@entities/user.entity';
+import { Person } from '@entities/person.entity';   
 
 // For password hashing
 import * as bcrypt from 'bcrypt';   
@@ -17,18 +18,15 @@ export class UserService {
     ) {}
 
     // Generate token using user's user_id
-    async create(phone_number: string, password: string) : Promise<User> {
-        // check if the user already exists
-        const existingUser = await this.userRepository.findOne({ where: { user_id: phone_number } });
-        if (existingUser) { throw new BadRequestException('이미 존재하는 전화번호입니다.'); }
+    async create(phone_number: string, person: Person, password: string) : Promise<User> {
         // password hashing
         const hashedPassword = await bcrypt.hash(password, 10);
         // save user info
         const user:User = this.userRepository.create({
             user_id: phone_number,
+            personId: person.id,
             user_password: hashedPassword,
         });
- 
         return await this.userRepository.save(user);
     }
 
@@ -44,8 +42,6 @@ export class UserService {
 
     // Find user by user_id
     async findUser(user_id: string): Promise<User> {
-        const user = await this.userRepository.findOne({ where: { user_id: user_id } });
-        if (!user) { throw new NotFoundException('User not found'); }
-        return user;
+        return await this.userRepository.findOne({ where: { user_id: user_id } });
     }
 }

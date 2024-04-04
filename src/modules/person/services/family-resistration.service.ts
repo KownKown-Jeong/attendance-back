@@ -26,7 +26,7 @@ export class FamilyResistrationService {
     async create(familyMembers: familyMembers[], address: Address | null, person: Person) {
         for(const member of familyMembers){
             // newPerson registration
-            const newPerson = await this.personResistrationService.create(null, member.aPerson, address);
+            const newPerson = await this.personResistrationService.create(member.aPerson, address);
 
             let parenT = null;
             let chilD = null;

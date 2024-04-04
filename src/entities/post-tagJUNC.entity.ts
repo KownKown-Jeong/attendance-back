@@ -10,18 +10,10 @@ export class PostTagJUNC {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // Post ID
-  @Column()
-  post_id: number;
-
   // Post relationship with Post
   @ManyToOne(() => PostBody, postBody => postBody.postTagJUNCs)
   @JoinColumn({ name: 'post_id' })
   postBody: PostBody;
-
-  // Tag ID
-  @Column()
-  tag_id: number;
 
   // Tag relationship with PostTag
   @ManyToOne(() => PostTag, postTag => postTag.postTagJUNCs)

@@ -18,9 +18,8 @@ export class PersonResistrationService {
         @InjectRepository(Person)
         private readonly personRepository: Repository<Person>,
     ) {}
-    async create(user: User | null, aPerson: aPerson, address: Address | null) {
+    async create(aPerson: aPerson, address: Address | null) {
         const person = this.personRepository.create({
-            user: user,
             name: aPerson.name,
             gender: aPerson.gender,
             date_of_birth: aPerson.date_of_birth,

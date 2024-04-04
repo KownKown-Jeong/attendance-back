@@ -16,7 +16,7 @@ export class Part {
  
   // Part relationship with Department
   @ManyToOne(() => Department, department => department.parts)
-  @JoinColumn({ name: 'name' })
+  @JoinColumn({ name: 'parent_id' })
   department: Department;
 
   // Part name

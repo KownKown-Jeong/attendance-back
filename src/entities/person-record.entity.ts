@@ -9,18 +9,10 @@ export class PersonRecord {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // Student ID
-  @Column()
-  student_id: number;
-
   // Record relationship with Student
   @ManyToOne(() => Person)
   @JoinColumn({ name: 'student_id' })
   student: Person;
-
-  // Teacher ID
-  @Column()
-  teacher_id: number;
 
   // Record relationship with Teacher
   @ManyToOne(() => Person)

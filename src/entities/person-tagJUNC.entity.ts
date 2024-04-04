@@ -10,18 +10,10 @@ export class PersonTagJUNC {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // Person ID
-  @Column()
-  person_id: number;
-
   // Person TagJUNC relationship with Person
   @ManyToOne(() => Person)
-  @JoinColumn({ name: 'person_id' })
+  @JoinColumn({ name: 'author_id' })
   person: Person;
-
-  // Tag ID
-  @Column()
-  tag_id: number;
 
   // Person TagJUNC relationship with Tag
   @ManyToOne(() => PersonTag)

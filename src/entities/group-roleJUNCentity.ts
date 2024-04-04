@@ -16,18 +16,10 @@ export class RoleJUNC {
   @OneToMany(() => AttendanceJUNC, attendanceJUNC => attendanceJUNC.roleJUNC, { nullable: true })
   attendances: AttendanceJUNC[];
 
-  // Part ID
-  @Column()
-  part_id: number;
-
   // RoleJUNC relationship with GroupPart
   @ManyToOne(() => Part, part => part.roleJUNCs)
   @JoinColumn({ name: 'part_id' })
   part: Part;
-
-  // Role 
-  @Column()
-  role_id: number;
 
   // RoleJUNC relationship with Role
   @ManyToOne(() => Role, role => role.roleJUNCs)
@@ -36,6 +28,7 @@ export class RoleJUNC {
 
   // RoleJUNC relationship with Person
   @ManyToOne(() => Person, person => person.roleJUNCs)
+  @JoinColumn({ name: 'person_id' })
   person: Person;
 
   // RoleJUNC start date

@@ -1,6 +1,6 @@
 // src/entities/person.entity.ts
 // The entity class for the person table
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { AttendanceJUNC } from './attendanceJUNC.entity';
 import { RoleJUNC } from './group-roleJUNCentity';
 import { Address } from './person-address.entity';
@@ -10,7 +10,6 @@ import { PersonRecord } from './person-record.entity';
 import { PersonTagJUNC } from './person-tagJUNC.entity';
 import { PostBody } from './post-body.entity';
 import { PostComment } from './post-comment.entity';
-import { User } from './user.entity';
 import { Gender } from '@common/enums';           // enums
 
 @Entity({ name: 'person' })
@@ -18,11 +17,6 @@ export class Person {
   // Person Number
   @PrimaryGeneratedColumn()
   id: number;
-
-  // Person relationship with User
-  @OneToOne(() => User, { nullable: true })
-  @JoinColumn({ name: 'id' })
-  user: User;
 
   // Person name
   @Column()

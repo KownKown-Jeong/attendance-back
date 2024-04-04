@@ -21,10 +21,6 @@ export class Department {
   @OneToMany(() => Part, part => part.department, { nullable: true })
   parts: Part[];
 
-  // Department parent ID, nullable
-  @Column({ nullable: true })
-  parent_id: number;
-
   // Department able to connect each other with Parent and Children
   // Department relationship with Parent-Department, nullable
   @ManyToOne(() => Department, department => department.children, { nullable: true } )

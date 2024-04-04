@@ -11,31 +11,19 @@ export class AttendanceJUNC {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // Person ID
-  @Column()
-  person_id: number;
-
   // Attendance relationship with Person
   @ManyToOne(() => Person, person => person.attendances)
   @JoinColumn({ name: 'person_id' })
   person: Person;
 
-  // RoleJUNC ID
-  @Column()
-  person_role_id: number;
-
   // Attendance relationship with RoleJUNC
   @ManyToOne(() => RoleJUNC, roleJUNC => roleJUNC.attendances)
-  @JoinColumn({ name: 'person_role_id' })
+  @JoinColumn({ name: 'role_id' })
   roleJUNC: RoleJUNC;
 
-  // Attendance Date ID
-  @Column()
-  attendance_date_id: number;
-
-  // Attendance relationship with AttendanceDate
+    // Attendance relationship with AttendanceDate
   @ManyToOne(() => AttendanceDate, attendanceDate => attendanceDate.attendances)
-  @JoinColumn({ name: 'attendance_date_id' })
+  @JoinColumn({ name: 'date_id' })
   attendance_date: AttendanceDate;
 
   // Status

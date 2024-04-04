@@ -17,61 +17,66 @@ import { SignUpDto } from '@dto/sign-up.dto';
 // Controller for auth
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly jwtService: JwtService,
-    private readonly userService: UserService,    
-    private readonly personService: PersonService,
-  ) {}
-  // 1. vue에서 토큰의 유효성을 묻기 위한 요청에 따라 확인하는 기능
-  @Post('verify')
-  async verifyToken(@Req() request: Request) {
-    const token = request.cookies['jwt'];
-    try {
-      const payload = await this.jwtService.verify(token);
-      return { message: 'Token is valid', payload };
-    } catch (error) { throw new UnauthorizedException('Invalid token'); }
-  }
-
-  // 2. vue에서 로그인 요청 시 아이디와 비밀번호 확인하고 새로운 토큰을 리턴하는 기능
-  @Post('login')
-  async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) response: Response) {
-    try {
-      // Verification of user_id and password
-      const user = await this.userService.checkIdPw(loginDto.user_id, loginDto.password);
-      // Regenerate token and return
-      const token = await this.jwtService.create(user);
-      response.cookie('jwt', token, { httpOnly: true });
-      return { message: 'Login successful' };
-    } catch (error) {
-      if (error instanceof NotFoundException) { throw new BadRequestException('User not found'); // Notexisted user
-      } else if (error instanceof UnauthorizedException) { throw new BadRequestException('Invalid password'); // Wrong password
-      } else { throw error; // Etc
-      }
+    constructor(
+        private readonly jwtService: JwtService,
+        private readonly userService: UserService,    
+        private readonly personService: PersonService,
+    ) {}
+    // verifyToken: Verify the token and return the payload
+    @Post('verify')
+    async verifyToken(@Req() request: Request) {
+        const token = request.cookies['jwt'];
+        try {
+            const payload = await this.jwtService.verify(token);
+            return { message: 'Token is valid', payload };
+        } catch (error) { throw new UnauthorizedException('Invalid token'); }
     }
-  }
 
-  // 3. vue에서 회원가입 요청 시 회원가입을 진행하고 새로운 토큰을 리턴하는 기능
-  @Post('signup')
-  async signup(@Body() signUpDto: SignUpDto, @Res({ passthrough: true }) response: Response) {
-    try {
-      const { aPerson, password } = signUpDto;
-      // Create a new user
-      const newuser = await this.userService.create(aPerson.phone_number, password);
-      // Create a new person and junction with user
-      await this.personService.create(signUpDto, newuser);
-      // Regenerate token and return
-      const token = await this.jwtService.create(newuser);
-      response.cookie('jwt', token, { httpOnly: true });
-      return { message: 'Signup successful' };
-    } catch (error) {
-      throw error;
+    // login: Verify the user_id and password and return the new token
+    @Post('login')
+    async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) response: Response) {
+        try {
+            // Verification of user_id and password
+            const user = await this.userService.checkIdPw(loginDto.user_id, loginDto.password);
+            // Regenerate token and return
+            const token = await this.jwtService.create(user);
+            response.cookie('jwt', token, { httpOnly: true });
+            return { message: 'Login successful' };
+        } catch (error) {
+            if (error instanceof NotFoundException) { throw new BadRequestException('User not found'); // Notexisted user
+            } else if (error instanceof UnauthorizedException) { throw new BadRequestException('Invalid password'); // Wrong password
+            } else { throw error; // Etc
+            }
+        }
     }
-  }
 
-  // 4. vue에서 logout 요청 시 해당 토큰을 삭제하는 기능
-  @Post('logout')
-  async logout(@Res({ passthrough: true }) response: Response) {
-    response.clearCookie('jwt');
-    return { message: 'Logout successful' };
-  }
+    // signup: Create a new user and return the new token
+    @Post('signup')
+    async signup(@Body() signUpDto: SignUpDto, @Res({ passthrough: true }) response: Response) {
+        try {
+            const { aPerson, password } = signUpDto;
+            
+            const existingUser = await this.userService.findUser(aPerson.phone_number);       // Check if the id is already in use
+            if (existingUser) { throw new BadRequestException('User already exists'); }
+            
+            let person  = null;
+            person = await this.personService.getPersonByPhoneNumber(aPerson.phone_number);   // Check if the person already exists
+            if(!person) { person = await this.personService.create(signUpDto); }              // Create a new person when not exists
+            
+            const newuser = await this.userService.create(aPerson.phone_number, person, password);  // Create a new user
+            
+            const token = await this.jwtService.create(newuser);                              // Regenerate token and return
+            response.cookie('jwt', token, { httpOnly: true });                                // Set the token in the cookie
+            return { message: 'Signup successful' };                                          // Return the message 
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    // logout: Clear the token in the cookie
+    @Post('logout')
+    async logout(@Res({ passthrough: true }) response: Response) {
+        response.clearCookie('jwt');
+        return { message: 'Logout successful' };
+    }
 }
