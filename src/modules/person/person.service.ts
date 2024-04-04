@@ -41,12 +41,4 @@ export class PersonService {
         await this.familyResistrationService.create(familyMembers, newaddress, newperson); // Family registration
         return newperson;
     }
-    // Find User by user_id
-    async getPersonByUserId(user_id: string): Promise<Person> {
-        const user = await this.userService.findUser(user_id);
-        // Find person by User
-        const person = await this.personRepository.findOne({ where: { user: user } });
-        if (!person) { throw new NotFoundException('Person not found'); }
-        return person;
-    }
 }

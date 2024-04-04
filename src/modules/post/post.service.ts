@@ -83,7 +83,7 @@ export class PostService {
         if (!tag) {
           tag = await this.createTag(tagName);
         }
-        await this.addTagToPost(newPost.id, tag.id);
+        await this.addTagToPost(newPost, tag);
       }
     }
 
@@ -113,8 +113,8 @@ export class PostService {
   }
 
   // Add a tag to a post
-  async addTagToPost(postId: number, tagId: number) {
-    const postTagJUNC = this.postTagJUNCRepository.create({ post_id: postId, tag_id: tagId });
+  async addTagToPost(postBody: PostBody, tag: PostTag) {
+    const postTagJUNC = this.postTagJUNCRepository.create({ postBody: postBody, tag: tag }); 
     return this.postTagJUNCRepository.save(postTagJUNC);
   }
 
