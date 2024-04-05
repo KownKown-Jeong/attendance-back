@@ -16,6 +16,4 @@ export class PersonTag {
   // Tag name
   @Column()
   name: string;
-
-
 }

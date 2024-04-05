@@ -1,7 +1,6 @@
 // src/dto/create-post.dto.ts
 
-import { IsString, IsOptional, IsArray } from 'class-validator';
-import { PostImage } from '@entities/post-image.entity';
+import { IsString, IsOptional, IsArray , IsNumber } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -16,5 +15,6 @@ export class CreatePostDto {
 
   @IsOptional()
   @IsArray()
-  uploadedImages?: PostImage[];
+  @IsNumber({}, { each: true })
+  uploadedImageIds?: number[];
 }

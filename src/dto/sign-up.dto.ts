@@ -3,7 +3,6 @@ import { Gender, Relationship } from '@common/enums';
 
 // Formet of a person
 export class aPerson {
-  user: string;
   name: string;
   gender: Gender;
   date_of_birth: Date;
