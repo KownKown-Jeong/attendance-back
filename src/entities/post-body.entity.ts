@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // src/entities/post-body.entity.ts
+=======
+// src/entities/post.entity.ts
+>>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
 // The entity class for the post table
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Person } from './person.entity';
@@ -12,6 +16,7 @@ export class PostBody {
   @PrimaryGeneratedColumn()
   id: number;
 
+<<<<<<< HEAD
   // Post relationship with Person
   @Column({ name: 'person_id' })
   personId: number;
@@ -19,6 +24,21 @@ export class PostBody {
   @JoinColumn({ name: 'person_id' })
   person: Person;
 
+=======
+  // Person number
+  @Column()
+  person_id: number;
+
+  // Post relationship with Person
+  @ManyToOne(() => Person, (person) => person.postBodys)
+  @JoinColumn({ name: 'author_id' })
+  person: Person;
+
+  // Image number
+  @Column({ nullable: true })
+  post_image_id: number;
+
+>>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
   // Post relationship with PostImage, nullable
   @OneToMany(() => PostImage, (postImage) => postImage.postBody, { nullable: true })
   postImages: PostImage[];

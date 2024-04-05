@@ -34,9 +34,17 @@ export class Person {
   @Column({ nullable: true })
   phone_number: string;
 
+<<<<<<< HEAD
   // Person relationship with Address
   @Column({ name: 'address_id', nullable: true })
   addressId: number;
+=======
+  // Address, nullable
+  @Column({ nullable: true })
+  address_id: Number;
+
+  // Person relationship with Address
+>>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
   @ManyToOne(() => Address, address => address.residents, { nullable: true })
   @JoinColumn({ name: 'address_id' })
   address: Address;

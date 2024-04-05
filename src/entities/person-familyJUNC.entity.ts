@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // src/entities/person-familyJUNC.entity.ts
+=======
+// src/entities/person-family.entity.ts
+>>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
 // The entity class for the family JUNCTION table to each person
 import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, JoinColumn } from 'typeorm';
 import { Person } from './person.entity';
@@ -12,8 +16,11 @@ export class FamilyJUNC {
 
   // Family connected with this field
   // Family relationship with Parent-Person
+<<<<<<< HEAD
   @Column({ name: 'parent_id' })
   parentId: number;
+=======
+>>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
   @ManyToOne(() => Person, person => person.parent)
   @JoinColumn({ name: 'parent_id' })
   parent: Person;
@@ -23,8 +30,11 @@ export class FamilyJUNC {
   child_id: number;  
 
   // Family relationship with Children-Person
+<<<<<<< HEAD
   @Column({ name: 'child_id' })
   childId: number;
+=======
+>>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
   @ManyToOne(() => Person, person => person.children)
   @JoinColumn({ name: 'child_id' })
   child: Person;
