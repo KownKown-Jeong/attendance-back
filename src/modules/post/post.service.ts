@@ -5,11 +5,7 @@
 import { Injectable } from '@nestjs/common';
 import { S3 } from 'aws-sdk';
 import { InjectRepository } from '@nestjs/typeorm';
-<<<<<<< HEAD
 import { Repository, In } from 'typeorm';
-=======
-import { Repository } from 'typeorm';
->>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
 import { PostBody } from '@entities/post-body.entity';
 import { PostTag } from '@entities/post-tag.entity';
 import { PostTagJUNC } from '@entities/post-tagJUNC.entity';
@@ -71,53 +67,30 @@ export class PostService {
 
   // Create a new post
   async create(person_id: number, createPostDto: CreatePostDto) {
-<<<<<<< HEAD
     const { title, content, tags, uploadedImageIds} = createPostDto;
     const post = this.postRepository.create({
-=======
-    const { title, content, tags, uploadedImages} = createPostDto;
-    const post = this.postRepository.create({
-      person_id: person_id,
->>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
       title: title,
       content: content,
       type: 'visible',
     });
-<<<<<<< HEAD
     const thePerson = await this.personRepository.findOne({ where: { id : person_id } });
     post.person = thePerson;
-=======
->>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
     const newPost = await this.postRepository.save(post);
     
     // Create Tags & Tagging
     if (tags) {
       for (const tagName of tags) {
         let tag = await this.postTagRepository.findOne({ where: { name: tagName } });
-<<<<<<< HEAD
         if (!tag) { tag = await this.createTag(tagName); }
-=======
-        if (!tag) {
-          tag = await this.createTag(tagName);
-        }
->>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
         await this.addTagToPost(newPost, tag);
       }
     }
 
     // Juncture the post and images
-<<<<<<< HEAD
     if (uploadedImageIds && uploadedImageIds.length > 0) {
       const postImages = await this.postImageRepository.findBy({ id: In(uploadedImageIds), });
       newPost.postImages = postImages;
       await this.postRepository.save(newPost);
-=======
-    if (uploadedImages && uploadedImages.length > 0) {
-      for (const uploadedImage of uploadedImages) {
-        uploadedImage.post_body_id = newPost.id;
-      }
-      await this.postImageRepository.save(uploadedImages);
->>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
     }
     return newPost;
   }
@@ -143,20 +116,12 @@ export class PostService {
     return this.postTagJUNCRepository.save(postTagJUNC);
   }
 
-<<<<<<< HEAD
   async createComment(post_id: number, person_id: number, content: string) {
     const newComment = this.postCommentRepository.create({
-=======
-  async createComment(postId: number, authorId: number, content: string) {
-    const comment = this.postCommentRepository.create({
-      post_id: postId,
-      author_id: authorId,
->>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
       content,
       created_at: new Date(),
       updated_at: new Date(),
     });
-<<<<<<< HEAD
     const thePost = await this.postRepository.findOne({ where: { id : post_id } });
     newComment.postBody = thePost;
     const thePerson = await this.personRepository.findOne({ where: { id : person_id } });
@@ -166,12 +131,5 @@ export class PostService {
     
   async getCommentsByPostId(post_id: number) {
     return this.postCommentRepository.find({where: { postId: post_id }, relations: ['person'], });
-=======
-    return this.postCommentRepository.save(comment);
-  }
-    
-  async getCommentsByPostId(postId: number) {
-    return this.postCommentRepository.find({where: { post_id: postId }, relations: ['person'], });
->>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
   } 
 }

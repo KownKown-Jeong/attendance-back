@@ -21,17 +21,9 @@ export class PersonImage {
   @Column()
   uploaded_at: Date;
 
-<<<<<<< HEAD
   // Image relationship with Person'
   @Column({ name: 'person_id' })
   personId: number;
-=======
-  // Person ID
-  @Column()
-  person_id: number;
-
-  // Image relationship with Person
->>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
   @ManyToOne(() => Person, (person) => person.images, { nullable: true })
   @JoinColumn({ name: 'person_id' })
   person: Person;

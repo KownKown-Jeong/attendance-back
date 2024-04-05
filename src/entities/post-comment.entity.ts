@@ -10,36 +10,18 @@ export class PostComment {
   @PrimaryGeneratedColumn()
   id: number;
 
-<<<<<<< HEAD
   // Comment relationship with Post
   @Column({ name: 'post_id' })
   postId: number;
-=======
-  // Post ID
-  @Column()
-  post_id: number;
-
-  // Comment relationship with Post
->>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
   @ManyToOne(() => PostBody, postBody => postBody.postComments)
   @JoinColumn({ name: 'post_id' })
   postBody: PostBody;
 
-<<<<<<< HEAD
   // Comment relationship with Person
   @Column({ name: 'person_id' })
   personId: number;
   @ManyToOne(() => Person, person => person.postComments)
   @JoinColumn({ name: 'person_id' })
-=======
-  // Author(Person) ID
-  @Column()
-  author_id: number;
-
-  // Comment relationship with Person
-  @ManyToOne(() => Person, person => person.postComments)
-  @JoinColumn({ name: 'author_id' })
->>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
   person: Person;
 
   // Comment content

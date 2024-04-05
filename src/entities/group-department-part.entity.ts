@@ -15,11 +15,8 @@ export class Part {
   roleJUNCs: RoleJUNC[];
  
   // Part relationship with Department
-<<<<<<< HEAD
   @Column({ name: 'parent_id' })
   parentId: number;
-=======
->>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
   @ManyToOne(() => Department, department => department.parts)
   @JoinColumn({ name: 'parent_id' })
   department: Department;

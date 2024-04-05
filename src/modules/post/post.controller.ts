@@ -17,13 +17,8 @@ s
   @UseGuards(JwtGuard) @Post('upload')
   @UseInterceptors(FilesInterceptor('images'))
   async uploadImages(@UploadedFiles() images: Array<Express.Multer.File>) {
-<<<<<<< HEAD
     const postImages = await this.postService.uploadImagesToS3(images);
     return postImages.map(postImage => postImage.id);
-=======
-    const imageUrls = await this.postService.uploadImagesToS3(images);
-    return imageUrls;
->>>>>>> a73401d1f5efcc9523afe315ee9bb98739c79ebb
   }
 
   // Create a new post (with tagging & adding image URLs) & return the post DB
